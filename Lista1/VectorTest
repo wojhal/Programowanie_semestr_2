@@ -1,0 +1,17 @@
+from lista1s2 import Vector
+
+u = Vector()
+v = Vector()
+print(f"1)początkowy wygląd naszych wektorów: u:{u} v:{v}")
+u.podmieniacz([1,2,3])
+v.podmieniacz([5,5,5])
+print(f"2)wektory po podmienieniu na zaproponowane przez użytkownika: u:{u} v:{v}")
+print(f"3)suma wektorów u i v: {u+v}")
+print(f"4)różnica wektora v i wektora u: {v-u}")
+print(f"5)wektor u po pomnożeniu przez skalar równy 2.5: {u.skalar(2.5)}")
+print(f"6)iloczyn skalarny wektorów u i v: {u*v}")
+print(f"7)suma elementów wektora u={u}: {u.suma()}")
+print(f"8)długość wektora u={u}: {u.dlugosc()}")
+print(f"9)ostatni element wektora u={u}: {u[2]}")
+print(f"10)sprawdzenie czy w wektorze u={u} znajduje się: 1-{1 in u} , 15-{15 in u}")
+print(f"11)wygenerowanie losowego wektora v z elementami z przedziału [-10,10]: {v.randomizer()}")
