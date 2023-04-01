@@ -1,0 +1,120 @@
+import re
+
+def Podzial(string, podzialka):
+    """
+    Funkcja odpowiedzialna za zwrócenie stringa podzielonego na elementy według elementów podanych przez użytkownika
+
+    Parametry:
+    ----------
+    string - str
+        string, który ma zostać podzielony
+    podzialka - list
+        według jakich elementów ma zostać podzielony string (tzn. nowy element zostaje dodany do listy poprzez usunięcie
+        znaku, według którego dzielony owy string jest oraz dodanie do listy następującego po nim)
+    Output:
+    ---------
+    re.split(pattern, string) - list
+        podzielony string według kryteriów użytkownika
+
+    """
+    pattern = r'|'.join(podzialka)
+    return re.split(pattern, string)
+
+def Kolumnowe_dzialanie(dzialanie):
+    """
+    Funkcja odpowiedzialna za przedstawienie działania podanego przez użytkownika w formie stringa jako działania w słupku
+    oraz podanie jego wyniku (w zależności od rodzaju działania, działanie w słupku przyjmuje różną formę)
+
+    Parametry:
+    ----------
+    dzialanie - str
+        działanie, które ma zostać przedstawione w słupku oraz wykonane
+    Output:
+    ---------
+        działanie podane przez użytkownika przedstawione w słupku
+
+    """
+    lista_znakow = ['\+', '-', '\*']
+    lista_znaki = []
+    for znaki in lista_znakow:
+        lista_znaki.extend(re.findall(znaki, dzialanie))
+    if type(dzialanie) != str:
+        raise TypeError("Działanie musi być podane w formie stringa")
+    if lista_znaki == []:
+        raise ValueError("Działanie nie posiada żadnego z obsługiwanych znaków działań, spróbuj podać działanie matematyczne ze znakami +, -, *")
+    if all(c == lista_znaki[0] for c in lista_znaki):
+        if lista_znaki[0] == "-":
+            pierwotna = Podzial(dzialanie, ['-']) + [str(eval(dzialanie))]
+            print(pierwotna)
+            if pierwotna[0] == '':
+                pierwotna[0] = "-" + pierwotna[1]
+                print(pierwotna)
+            lista_int = [int(x) for x in pierwotna]
+            h = str(max(lista_int))
+            nowa = [str(y) for y in lista_int]
+            lista3 = []
+            for l in range(len(nowa) - 2):
+                lista3.append(nowa[l].rjust(5 * len(h) - 1, " "))
+            lista3.append(nowa[-2].rjust(5 * len(h) - 2, " "))
+            lista3.append(nowa[-1].rjust(5 * len(h) - 1, " "))
+            print(lista3)
+            c = (5 * len(h)) * ("-")
+            for el in range(len(lista3) - 2):
+                print(f"{lista3[el]}")
+            print(f"-{lista3[-2]}\n{c}\n{lista3[-1]}")
+        elif lista_znaki[0] == "*":
+            pierwotna = Podzial(dzialanie, ['\*']) + [str(eval(dzialanie))]
+            lista_int = [int(x) for x in pierwotna]
+            h = str(max(lista_int))
+            nowa = [str(y) for y in lista_int]
+            lista3 = []
+            for l in range(len(nowa) - 2):
+                lista3.append(nowa[l].rjust(3 * len(h) - 1, " "))
+            lista3.append(nowa[-2].rjust(3 * len(h) - 2, " "))
+            lista3.append(nowa[-1].rjust(3 * len(h) - 1, " "))
+            print(lista3)
+            c = (3 * len(h)) * ("-")
+            for el in range(len(lista3) - 2):
+                print(f"{lista3[el]}")
+            print(f"*{lista3[-2]}\n{c}\n{lista3[-1]}")
+        else:
+            pierwotna = Podzial(dzialanie, ['\+']) + [str(eval(dzialanie))]
+            print(pierwotna)
+            lista_int = [int(x) for x in pierwotna]
+            h = str(max(lista_int))
+            nowa = [str(y) for y in lista_int]
+            lista3 = []
+            for l in range(len(nowa) - 2):
+                lista3.append(nowa[l].rjust(5 * len(h) - 1, " "))
+            lista3.append(nowa[-2].rjust(5 * len(h) - 2, " "))
+            lista3.append(nowa[-1].rjust(5 * len(h) - 1, " "))
+            print(lista3)
+            c = (5 * len(h)) * ("-")
+            for el in range(len(lista3) - 2):
+                print(f"{lista3[el]}")
+            print(f"+{lista3[-2]}\n{c}\n{lista3[-1]}")
+    else:
+        pierwotna = Podzial(dzialanie, ['\+'])
+        for wyrazy in range(len(pierwotna)):
+            if "*" in pierwotna[wyrazy]:
+                pierwotna[wyrazy] = str(eval(pierwotna[wyrazy]))
+            elif "-" in pierwotna[wyrazy]:
+                pierwotna.extend(re.findall(r'-?\d+', pierwotna[wyrazy]))
+                pierwotna.remove(pierwotna[wyrazy])
+        pierwotna.append(str(eval(dzialanie)))
+        lista_int = [int(x) for x in pierwotna]
+        h = str(max(lista_int))
+        nowa = [str(y) for y in lista_int]
+        lista3 = []
+        for l in range(len(nowa) - 2):
+            lista3.append(nowa[l].rjust(5 * len(h) - 1, " "))
+        lista3.append(nowa[-2].rjust(5 * len(h) - 2, " "))
+        lista3.append(nowa[-1].rjust(5 * len(h) - 1, " "))
+        print(lista3)
+        c = (5 * len(h) * ("-"))
+        for el in range(len(lista3) - 2):
+            print(f"{lista3[el]}")
+        print(f"+{lista3[-2]}\n{c}\n{lista3[-1]}")
+
+
+print(Kolumnowe_dzialanie("2+5"))
