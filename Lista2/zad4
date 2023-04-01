@@ -1,0 +1,75 @@
+import PyPDF2 as pdf2
+import os
+
+def Podzialka(sciezka_pdf, liczba_stron):
+    """
+    Funkcja odpowiedzialna za podzielenie stron pdf-u na mniejsze części, o podanej przez użytkownika liczbie stron
+
+    Parametry:
+    ----------
+    sciezka_pdf - str
+        ścieżka do pdf-u, którego strony mają zostać podzielone
+    liczba_stron - int
+        liczba stron w jednej części (w ostatniej części może być mniej, liczba stron pdf-u może nie być podzielna przez
+        liczba_stron
+    Output:
+    ---------
+    lista1 - list
+        lista podzielonej na mniejsze części liczby stron pdf-u
+
+    """
+    if os.path.exists(sciezka_pdf) == False:
+        raise ValueError("Plik o takiej ścieżce nie istnieje, sprawdź nazwę ścieżki")
+    if type(liczba_stron) != int:
+        raise TypeError("Liczba stron w pdf-ie musi być liczbą naturalną")
+    if liczba_stron <= 0:
+        raise ValueError("Liczba stron w pdf-ie musi być większa od 0")
+    with open(sciezka_pdf, "rb") as pdf:
+        reader = pdf2.PdfReader(pdf)
+        liczba_stron_w = len(reader.pages)
+        lista = []
+        for i in range(liczba_stron_w):
+            lista.append(i)
+        lista1 = []
+        while lista:
+            chunk, lista = lista[:liczba_stron], lista[liczba_stron:]
+            lista1.append(chunk)
+    return lista1
+
+def Dzielenie_pdf(sciezka_do_pdf, sciezka_zwrotna, liczba_stron):
+    """
+    Funkcja odpowiedzialna za podzielenie pdf-u na mniejsze pdf-y o liczbie stron podanej przez użytkownika
+
+    Parametry:
+    ----------
+    sciezka_do_pdf - str
+        ścieżka do pdf-u, który ma zostać podzielony ma mniejsze pdf-y
+    sciezka_zwrotna
+        ścieżka, gdzie mają się owe mniejsze pdf-y pojawić
+    liczba_stron - int
+        liczba stron w jednym pdf-ie
+    Output:
+    ---------
+        mniejsze pdf-y będące efektem podzielenia pdf-a wyjściowego
+
+    """
+    if os.path.exists(sciezka_do_pdf) == False:
+        raise ValueError("Plik o takiej ścieżce nie istnieje, sprawdź nazwę ścieżki")
+    if os.path.exists(sciezka_zwrotna) == False:
+        raise ValueError("Taka ścieżka nie istnieje, sprawdź nazwę ścieżki")
+    if type(liczba_stron) != int:
+        raise TypeError("Liczba stron w pdf-ie musi być liczbą naturalną")
+    if liczba_stron <= 0:
+        raise ValueError("Liczba stron w pdf-ie musi być większa od 0")
+    with open(sciezka_do_pdf, "rb") as pdf:
+        reader2 = pdf2.PdfReader(pdf)
+        for przedzialka in Podzialka(sciezka_do_pdf, liczba_stron):
+            writer2 = pdf2.PdfWriter()
+            for numer in przedzialka:
+                wybrana_strona = reader2.pages[numer]
+                writer2.add_page(wybrana_strona)
+            with open(f"{sciezka_zwrotna}_od_{przedzialka[0]+1}_do_{przedzialka[-1]+1}.pdf", "wb") as s:
+                writer2.write(s)
+
+
+Dzielenie_pdf("/Users/wojtek/Desktop/matematicstaf/NE17.R.pdf", "/Users/wojtek/Desktop/matematicstaf/podzielony/",5)
