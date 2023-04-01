@@ -1,0 +1,30 @@
+import random
+import string
+do_hasla = string.ascii_letters + string.digits + string.punctuation
+def Password(length, characters=do_hasla):
+    """
+    Funkcja odpowiedzialna za zwrócenie przypadkowego hasła o podanej przez użytkownika długości złożonego ze znaków podanych przez
+    użytkownika lub ze wszystkich możliwych
+
+    Parametry:
+    ----------
+    length - int
+        długość hasła
+    characters - str
+        znaki, z których ma być złożone przypadkowe hasło (domyślnie wszystkie dostępne)
+    Output:
+    ---------
+    haslo - str
+        przypadkowo wygenerowane hasło z podanych znaków o podanej długości
+
+    """
+    if type(length) != int:
+        raise TypeError("Niewłaściwy typ długości hasła, podaj liczbę naturalną")
+    if length <= 0:
+        raise ValueError("Długość hasła musi być większa od 0")
+    haslo = ""
+    for x in range(length):
+        haslo += random.choice(characters)
+    return haslo
+
+print(Password(8))
