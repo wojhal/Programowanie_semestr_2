@@ -1,0 +1,42 @@
+from PIL import Image
+import os
+
+def min_zdj(do_zmiany,c,zmieniony):
+    """
+    Funkcja odpowiedzialna za zwrócenie obrazka o podanych przez użytkownika wymiarach o ścieżce podanej przez użytkownika
+
+    Parametry:
+    ----------
+    do_zmiany - str
+        ścieżka pliku, którego wymiary mają być zmienione
+    c - tuple
+        nowe wymiary obrazka zmienianego
+    zmieniony - str
+        ścieżka obrazka o zmienionych wymiarach
+    Output:
+    ---------
+    image2.show()
+        funkcja pozwalająca wyświetlić na ekranie obrazek o zmodyfikowanych wymiarach
+
+    """
+    if os.path.exists(do_zmiany) == False:
+        raise ValueError("Plik o takiej ścieżce nie istnieje, sprawdź nazwę ścieżki i rozszerzenie")
+    if os.path.splitext(do_zmiany)[1] not in [".png", ".jpg", ".jpeg"]:
+        raise ValueError("Niewłaściwe rozszerzenie pliku wejściowego")
+    if type(c) != tuple:
+        raise TypeError("Podaj rozmiar w postaci krotki")
+    for f in c:
+        if type(f) != int:
+            raise TypeError("Długość i szerokość muszą być liczbami naturalnymi")
+        if f <= 0:
+            raise ValueError("Parametry rozmiaru muszą być liczbami większymi od 0")
+    if os.path.splitext(zmieniony)[1] not in [".png", ".jpg", ".jpeg"]:
+        raise ValueError("Niewłaściwe rozszerzenie pliku wyjściowego")
+    image1 = Image.open(do_zmiany)
+    print(image1.size)
+    image1.show()
+    image2 = image1.resize(c)
+    image2.save(zmieniony)
+    return image2.show()
+
+print(min_zdj("/Users/wojtek/Desktop/szeroki.png", (5000, 700), "/Users/wojtek/Desktop/nowy.png"))
