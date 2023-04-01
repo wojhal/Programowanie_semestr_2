@@ -1,0 +1,54 @@
+import os
+import zipfile
+from datetime import date
+
+def wszystkie_pliki(katalog):
+    """
+    Funkcja odpowiedzialna za zebranie ścieżek wszystkich plików w folderze
+
+    Parametry:
+    ----------
+    katalog - str
+        ścieżka do folderu, w którym znajdują się pliki, których ścieżki chcemy uzyskać
+    Output:
+    ---------
+    pliki - list
+        lista ścieżek do plików w podanym folderze
+
+    """
+    if os.path.exists(katalog) == False:
+        raise ValueError("Plik o takiej ścieżce nie istnieje, sprawdź nazwę ścieżki")
+    pliki = []
+    for root, directories, files in os.walk(katalog):
+        for file in files:
+            sciezka_pliku = os.path.join(root, file)
+            pliki.append(sciezka_pliku)
+    return pliki
+
+def Kopia(foldery, miejsce):
+    """
+    Funkcja odpowiedzialna za zwrócenie kopii bezpieczeństwa folderów podanych przez użytkownika z dzisiejszą datą
+
+    Parametry:
+    ----------
+    foldery - list
+        lista folderów, których kopię bezpieczeństwa użytkownik chce uzyskać
+    miejsce - str
+        miejsce, w którym owa kopia bezpieczeństwa ma się pojawić
+    Output:
+    ---------
+        kopia bezpieczeństwa folderów podanych przez użytkownika
+
+    """
+    if os.path.exists(miejsce) == False:
+        raise ValueError("Taka ścieżka nie istnieje, sprawdź nazwę ścieżki")
+    lista = wszystkie_pliki(f"/Users/wojtek/Desktop/{foldery[0]}")
+    for liczba in range(1, len(foldery)):
+        lista.extend(wszystkie_pliki(f"/Users/wojtek/Desktop/{foldery[liczba]}"))
+    print(lista)
+    my_zip = zipfile.ZipFile(f"{miejsce}-{date.today()}-pliki.zip", "w")
+    for pliczki in lista:
+        my_zip.write(pliczki)
+    my_zip.close()
+
+print(Kopia(["flagi", "herby do zrobienia"],"/Users/wojtek/Desktop/"))
