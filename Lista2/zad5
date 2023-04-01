@@ -1,0 +1,70 @@
+from PIL import Image, ImageEnhance
+import os
+
+def Watermark(znak_wodny, bright):
+    """
+    Funkcja odpowiedzialna za utworzenie watermarka z obrazka o jasności podanych przez użytkownika
+
+    Parametry:
+    ----------
+    znak_wodny - str
+        ścieżka do obrazka, na bazie którego ma zostać stworzony watermark
+    bright - float
+        jasność watermarka
+    Output:
+    ---------
+    Image.open("/Users/wojtek/Desktop/watermark.png") - None
+        funkcja pozwalająca na późniejsze używanie owego watermarka do innych celów
+
+    """
+    if os.path.exists(znak_wodny) == False:
+        raise ValueError("Plik o takiej ścieżce nie istnieje, sprawdź nazwę ścieżki")
+    if os.path.splitext(znak_wodny)[1] not in [".png", ".jpg", ".jpeg"]:
+        raise ValueError("Niewłaściwe rozszerzenie pliku wejściowego")
+    if bright < 0 or bright > 1:
+        raise ValueError("Jasność watermarka musi być w zakresie 0-1")
+    do_znaku = Image.open(f"{znak_wodny}")
+    do_znaku = do_znaku.resize((int(do_znaku.size[0]/5),int(do_znaku.size[1]/5)))
+    do_znaku = do_znaku.convert("RGBA")
+    alpha = do_znaku.split()[3]
+    alpha = ImageEnhance.Brightness(alpha).enhance(bright)
+    do_znaku.putalpha(alpha)
+    do_znaku.save("/Users/wojtek/Desktop/watermark.png")
+    return Image.open("/Users/wojtek/Desktop/watermark.png")
+
+def Dodawanie_watermark(glowne, watermark, alpha):
+    """
+    Funkcja odpowiedzialna za naniesienie watermarka na obrazek główny
+
+    Parametry:
+    ----------
+    glowne - str
+        ścieżka do obrazka, na który ma zostać naniesiony watermark
+    watermark - str
+        ścieżka do obrazka, który ma być watermarkiem
+    alpha - float
+        jasność watermarka
+    Output:
+    ---------
+    z_watermarkiem.show()
+        funkcja pozwalająca na wyświetlenie na ekranie obrazka wyjściowego z naniesionym na niego watermarkiem
+
+    """
+    if os.path.exists(glowne) == False:
+        raise ValueError("Plik o takiej ścieżce nie istnieje, sprawdź nazwę ścieżki")
+    if os.path.splitext(glowne)[1] not in [".png", ".jpg", ".jpeg"]:
+        raise ValueError("Niewłaściwe rozszerzenie pliku wejściowego")
+    if os.path.exists(watermark) == False:
+        raise ValueError("Plik o takiej ścieżce nie istnieje, sprawdź nazwę ścieżki")
+    if os.path.splitext(watermark)[1] not in [".png", ".jpg", ".jpeg"]:
+        raise ValueError("Niewłaściwe rozszerzenie pliku wejściowego")
+    if alpha < 0 or alpha > 1:
+        raise ValueError("Jasność watermarka musi być w zakresie 0-1")
+    zdjecie = Image.open(f"{glowne}")
+    wodny = Watermark(f"{watermark}", alpha)
+    z_watermarkiem = zdjecie.copy()
+    z_watermarkiem.paste(wodny,(int(z_watermarkiem.size[0]/5),int(z_watermarkiem.size[1]/1.7)))
+    z_watermarkiem.save("/Users/wojtek/Desktop/z_watermarkiem.png")
+    return z_watermarkiem.show()
+
+print(Dodawanie_watermark("/Users/wojtek/Desktop/herby do zrobienia/slask/wks.png","/Users/wojtek/Desktop/wiewior.jpeg", 0.1))
