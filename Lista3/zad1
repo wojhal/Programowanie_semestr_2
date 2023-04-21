@@ -1,0 +1,33 @@
+import os
+import time
+import zipfile
+from datetime import date
+
+def Kopiowacz(miejsce, rozszerzenie, dni, backup):
+    lista_plikow = []
+    for root, dirs, files in os.walk(f"{miejsce}"):
+        for file in files:
+            if file.endswith(f".{rozszerzenie}"):
+                 lista_plikow.append(os.path.join(root, file))
+    print(lista_plikow)
+    now = time.time()
+    list1 = []
+    for file_name in lista_plikow:
+        if (now-os.stat(file_name).st_mtime) < 3600*24*dni:
+            list1.append(file_name)
+    print(list1)
+
+    if os.path.exists(f"{backup}/Backup") == True:
+        my_zip = zipfile.ZipFile(f"{backup}/Backup/copy-{date.today()}.zip", "w")
+        for pliczki in list1:
+            my_zip.write(pliczki)
+        my_zip.close()
+    else:
+        os.mkdir(rf"{backup}/Backup")
+    my_zip = zipfile.ZipFile(f"{backup}/Backup/copy-{date.today()}.zip", "w")
+    for pliczki in list1:
+        my_zip.write(pliczki)
+    my_zip.close()
+
+if __name__ == "__main__":
+    print(Kopiowacz("/Users/wojtek/Desktop/herby do zrobienia", "png", 31, "/Users/wojtek/Desktop"))
