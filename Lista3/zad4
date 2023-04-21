@@ -1,0 +1,16 @@
+import qrcode
+import cv2
+
+def QR_tworzacz(wiadomosc):
+    obraz = qrcode.make(wiadomosc)
+    obraz.save('wiadomosc.png')
+    obraz.show()
+    return 'wiadomosc.png'
+def QR_reader(sciezka):
+    image = cv2.imread(f"{sciezka}")
+    kod = cv2.QRCodeDetector()
+    data, bbox, straight_qrcode = kod.detectAndDecode(image)
+    return f"Zakodowana wiadomość:\n\n{data}\n\nKoniec wiadomości"
+
+if __name__ == "__main__":
+    print(QR_reader(QR_tworzacz("https://youtu.be/dQw4w9WgXcQ")))
