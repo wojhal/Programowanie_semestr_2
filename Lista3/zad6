@@ -1,0 +1,32 @@
+import requests
+from bs4 import BeautifulSoup
+import webbrowser
+
+def Wikipediowy_przypadkowacz(proby):
+    proba = 0
+    while proba < proby:
+        URL = "https://en.wikipedia.org/wiki/Special:Random"
+        r = requests.get(URL)
+        soup = BeautifulSoup(r.content, 'html.parser')
+        tytul = soup.find(id="firstHeading").text
+        print(tytul)
+        while True:
+            try:
+                resp = input("Czy interesuje cię powyższy tytuł? (t/n) ")
+                assert resp.lower() == "t" or resp.lower() == "n"
+                break
+            except:
+                print("t/n")
+        print("-------------------")
+        if resp.lower() == "t":
+            print("Twoje życzenie jest dla mnie rozkazem")
+            webbrowser.open(f"https://en.wikipedia.org/wiki/{tytul}")
+            break
+        elif resp.lower() == "n":
+            proba += 1
+    if proba == proby:
+        print("Nie udało się znaleźć wystarczająco interesującego tytułu. Przepraszamy :(")
+
+
+if __name__ == "__main__":
+    print(Wikipediowy_przypadkowacz(5))
