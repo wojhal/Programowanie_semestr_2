@@ -1,0 +1,41 @@
+import PyPDF2 as pdf2
+from s2lista2zad3 import wszystkie_pliki
+from s2lista2zad4 import Dzielenie_pdf
+
+def Porownywacz(plik1, plik2):
+    with open(plik1, "rb") as pdf_one, open(plik2, "rb") as pdf_two:
+        pdf1_reader = pdf2.PdfReader(pdf_one)
+        pdf2_reader = pdf2.PdfReader(pdf_two)
+        pdf1_strony = len(pdf1_reader.pages)
+        pdf2_strony = len(pdf2_reader.pages)
+        if pdf1_strony != pdf2_strony:
+            return False,",różne długości pdf-ów"
+        else:
+            for strona in range(pdf1_strony):
+                if pdf1_reader.pages[strona].extract_text() != pdf2_reader.pages[strona].extract_text():
+                    return False,",różna zawartość pdf-ów"
+            return True,",Pdf takie same"
+
+def Lacznik(plik_poczatkowy, sciezka, wyjsciowa):
+    merger = pdf2.PdfMerger()
+    if type(sciezka) == str:
+        Dzielenie_pdf(plik_poczatkowy, sciezka, 5)
+        lista_pdf = wszystkie_pliki(sciezka)
+        lista_pdf.remove(lista_pdf[0])
+        lista_pdf.sort()
+        print(lista_pdf)
+        for files in lista_pdf:
+            merger.append(files)
+        merger.write(wyjsciowa)
+        merger.close()
+        return Porownywacz(plik_poczatkowy, wyjsciowa)
+
+    elif type(sciezka) == list:
+        print(sciezka)
+        for files in sciezka:
+            merger.append(files)
+        merger.write(wyjsciowa)
+        merger.close()
+
+if __name__ == "__main__":
+    print(Lacznik("/Users/wojtek/Desktop/matematicstaf/NE21.R.pdf", "/Users/wojtek/Desktop/matematicstaf/podzielony/", "/Users/wojtek/Desktop/matematicstaf/podzielony/united.pdf"))
