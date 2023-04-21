@@ -1,0 +1,19 @@
+def Koncowkarz(sciezka):
+    path = rf"{sciezka}"
+    with open(path, 'rb') as open_file:
+        opened = open_file.read()
+    sprawdzacz_koncowki = open(sciezka)
+    sprawdzacz_koncowki.readline()
+    koncowka = repr(sprawdzacz_koncowki.newlines)
+    print(koncowka)
+    if koncowka != '\r\n':
+        opened = opened.replace(b'\n', b'\r\n')
+        with open(sciezka, 'wb') as open_file:
+            open_file.write(opened)
+    elif koncowka == "\r\n":
+        opened = opened.replace(b'\r\n', b'\n')
+        with open(sciezka, 'wb') as open_file:
+            open_file.write(opened)
+
+if __name__ == "__main__":
+    print(Koncowkarz("/Users/wojtek/PycharmProjects/pythonProject1/test.txt"))
