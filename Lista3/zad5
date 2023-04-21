@@ -16,14 +16,14 @@ def Nawiasowacz(string):
     for c in string:
         if c in lista_open or c in lista_close:
             nawiasy.append(c)
-    print(nawiasy)
+    print("wszystkie nawiasy:",nawiasy)
     for d in nawiasy:
         if d in lista_open:
             nawiasy_open += 1
         if d in lista_close:
             nawiasy_close += 1
     if nawiasy_open == nawiasy_close:
-        print(True)
+        print(True,"liczba nawiasów otwierających i zamykających jest taka sama")
 
     while nawiasy != []:
         nowe_nawiasy = []
@@ -33,6 +33,7 @@ def Nawiasowacz(string):
                     if lista_open.index(nawiasy[index]) == lista_close.index(nawiasy[index+1]):
                         for idex in range(2):
                             nawiasy.pop(index)
+                        print("nawiasy:",nawiasy)
                         break
                     else:
                         nowe_nawiasy.append(nawiasy[index])
@@ -43,11 +44,11 @@ def Nawiasowacz(string):
 
 
         if nowe_nawiasy == nawiasy != []:
-            print(False)
+            print(False,"nawiasy są źle pozagnieżdżane")
             break
 
     if nawiasy == []:
-        return True,"nawiasy są dobrze pozagnieżdżane"
+        print(True,"nawiasy są dobrze pozagnieżdżane")
 
 if __name__ == "__main__":
     Nawiasowacz("[5+6(4*<6-9>)]")
