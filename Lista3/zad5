@@ -1,0 +1,53 @@
+def Nawiasowacz(string):
+    elements = []
+    nawiasy_open = 0
+    nawiasy_close = 0
+    nawiasy = []
+    lista_open = ["(", "[", "{", "<"]
+    lista_close = [")", "]", "}", ">"]
+    for e in string:
+        elements.append(e)
+    for x in range(len(elements)-1):
+        for y in range(x+2, len(elements)-1):
+            if elements[x] in lista_open and elements[y] in lista_close:
+                if lista_open.index(elements[x]) == lista_close.index(elements[y]):
+                    if elements[x] == elements[x+1] and elements[y] == elements[y+1]:
+                        print("Znaleziono dwa nawiasy tego samego typu obok siebie, napraw usterkę")
+    for c in string:
+        if c in lista_open or c in lista_close:
+            nawiasy.append(c)
+    print(nawiasy)
+    for d in nawiasy:
+        if d in lista_open:
+            nawiasy_open += 1
+        if d in lista_close:
+            nawiasy_close += 1
+    if nawiasy_open == nawiasy_close:
+        print(True)
+
+    while nawiasy != []:
+        nowe_nawiasy = []
+        for index in range(len(nawiasy)):
+            if nawiasy[index] in lista_open:
+                if nawiasy[index+1] in lista_close:
+                    if lista_open.index(nawiasy[index]) == lista_close.index(nawiasy[index+1]):
+                        for idex in range(2):
+                            nawiasy.pop(index)
+                        break
+                    else:
+                        nowe_nawiasy.append(nawiasy[index])
+                else:
+                    nowe_nawiasy.append(nawiasy[index])
+            else:
+                nowe_nawiasy.append(nawiasy[index])
+
+
+        if nowe_nawiasy == nawiasy != []:
+            print(False)
+            break
+
+    if nawiasy == []:
+        return True,"nawiasy są dobrze pozagnieżdżane"
+
+if __name__ == "__main__":
+    Nawiasowacz("[5+6(4*<6-9>)]")
