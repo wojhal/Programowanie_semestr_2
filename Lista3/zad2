@@ -1,19 +1,29 @@
-def Koncowkarz(sciezka):
-    path = rf"{sciezka}"
-    with open(path, 'rb') as open_file:
+def Windowsiarz(sciezka):
+    with open(sciezka, 'rb') as open_file:
         opened = open_file.read()
+    opened = opened.replace(b'\r\n', b'\n')
+
+    with open(sciezka, 'wb') as open_file:
+        open_file.write(opened)
+
+def Unixowiec(sciezka):
+    with open(sciezka, 'rb') as open_file:
+        opened = open_file.read()
+    opened = opened.replace(b'\n', b'\r\n')
+
+    with open(sciezka, 'wb') as open_file:
+        open_file.write(opened)
+
+def Koncowkarz(sciezka):
     sprawdzacz_koncowki = open(sciezka)
     sprawdzacz_koncowki.readline()
     koncowka = repr(sprawdzacz_koncowki.newlines)
-    print(koncowka)
-    if koncowka != '\r\n':
-        opened = opened.replace(b'\n', b'\r\n')
-        with open(sciezka, 'wb') as open_file:
-            open_file.write(opened)
-    elif koncowka == "\r\n":
-        opened = opened.replace(b'\r\n', b'\n')
-        with open(sciezka, 'wb') as open_file:
-            open_file.write(opened)
+    print("Typ końca linii:", koncowka)
+    a = input("Który typ końca linii chciałbyś uzyskać? (windows/unix): ")
+    if a == "unix":
+        return Windowsiarz(sciezka)
+    elif a == "windows":
+        return Unixowiec(sciezka)
 
 if __name__ == "__main__":
-    print(Koncowkarz("/Users/wojtek/PycharmProjects/pythonProject1/test.txt"))
+    Koncowkarz("/Users/wojtek/PycharmProjects/pythonProject1/test.txt")
