@@ -3,6 +3,25 @@ from bs4 import BeautifulSoup
 import webbrowser
 
 def Wikipediowy_przypadkowacz(proby):
+    """
+
+    Funkcja odpowiedzialna za przedstawianie użytkownikowi żądanej liczby losowych tytułów artykułów wikipedii do momentu aż
+    któryś tytuł użytkownikowi się spodoba i program przeniesie go do owego artykułu
+
+    Parametry:
+    -----------
+    proby - int
+        maksymalna liczba tytułów artykułów, które mogą być przedstawione użytkownikowi
+    Output:
+    ---------
+        przeniesienie do artykułu, który się użytkownikowi spodoba lub informacja zwrotna po zakończeniu działania
+        programu
+        
+    """
+    if type(proby) != int:
+        raise TypeError("Próby muszą być typu int")
+    if proby <= 0:
+        raise ValueError("Liczba prób musi być liczbą naturalną")
     proba = 0
     while proba < proby:
         URL = "https://en.wikipedia.org/wiki/Special:Random"
