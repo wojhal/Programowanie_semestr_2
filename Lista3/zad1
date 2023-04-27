@@ -4,6 +4,40 @@ import zipfile
 from datetime import date
 
 def Kopiowacz(miejsce, rozszerzenie, dni, backup):
+    """
+
+    Funkcja odpowiedzialna za przeniesienie plików o żądanym rozszerzeniu i późniejszej ostatniej dacie modyfikacji niż
+    podana przez użytkownika do folderu Backup (jeśli nie jest on stworzony wcześniej, funkcja najpierw go tworzy)
+
+    Parametry:
+    ----------
+    miejsce - str
+        ścieżka, w której mają być szukane pliki o podanym rozszerzeniu
+    rozszerzenie - str
+        rozszerzenie, o jakim mają być zbackupowane pliki
+    dni - int
+        najpóźniejszy termin w jakim mogła odbyć się modyfikacja plików
+    backup - str
+        ścieżka w jakiej ma zostać umieszczona kopia bezpieczeństwa plików
+    Output:
+    ---------
+        kopia bezpieczeństwa plików, które mają zostać zbackupowane
+
+    """
+    if type(miejsce) != str:
+        raise TypeError("Nazwa ścieżki musi zostać podana w postaci stringa")
+    if os.path.exists(miejsce) == False:
+        raise ValueError("Folder/dyrektywa o takiej ścieżce nie istnieje, sprawdź nazwę ścieżki")
+    if type(rozszerzenie) != str:
+        raise TypeError("Rozszerzenie musi być w postaci stringa")
+    if type(dni) != int:
+        raise TypeError("Liczba dni musi być w postaci int")
+    if dni <= 0:
+        raise ValueError("Liczba dni musi być liczbą dodatnią naturalną")
+    if type(backup) != str:
+        raise TypeError("Nazwa ścieżki musi zostać podana w postaci stringa")
+    if os.path.exists(backup) == False:
+        raise ValueError("Folder/dyrektywa o takiej ścieżce nie istnieje, sprawdź nazwę ścieżki")
     lista_plikow = []
     for root, dirs, files in os.walk(f"{miejsce}"):
         for file in files:
@@ -24,7 +58,7 @@ def Kopiowacz(miejsce, rozszerzenie, dni, backup):
         my_zip.close()
     else:
         os.mkdir(rf"{backup}/Backup")
-    my_zip = zipfile.ZipFile(f"{backup}/Backup/copy-{date.today()}.zip", "w")
+        my_zip = zipfile.ZipFile(f"{backup}/Backup/copy-{date.today()}.zip", "w")
     for pliczki in list1:
         my_zip.write(pliczki)
     my_zip.close()
