@@ -1,4 +1,23 @@
+import os
+
 def Windowsiarz(sciezka):
+    """
+
+    Funkcja odpowiedzialna za zmianę końca linii w pliku tekstowym z windowsowego na unixowy
+
+    Parametry:
+    -----------
+    sciezka - str
+        ścieżka do pliku, w którym mają zostać zmienione końce linii
+    Output:
+    ----------
+        plik ze zmienionymi końcami linii
+
+    """
+    if type(sciezka) != str:
+        raise TypeError("Nazwa ścieżki musi zostać podana w postaci stringa")
+    if os.path.exists(sciezka) == False:
+        raise ValueError("Plik o takiej ścieżce nie istnieje, sprawdź nazwę ścieżki")
     with open(sciezka, 'rb') as open_file:
         opened = open_file.read()
     opened = opened.replace(b'\r\n', b'\n')
@@ -7,6 +26,22 @@ def Windowsiarz(sciezka):
         open_file.write(opened)
 
 def Unixowiec(sciezka):
+    """
+    Funkcja odpowiedzialna za zmianę końca linii w pliku tekstowym z unxiowego na windowsowy
+
+    Parametry:
+    ----------
+    sciezka - str
+        ścieżka do pliku, w którym mają zostać zmienione końce linii
+    Output:
+    ----------
+        plik ze zmienionymi końcami linii
+
+    """
+    if type(sciezka) != str:
+        raise TypeError("Nazwa ścieżki musi zostać podana w postaci stringa")
+    if os.path.exists(sciezka) == False:
+        raise ValueError("Plik o takiej ścieżce nie istnieje, sprawdź nazwę ścieżki")
     with open(sciezka, 'rb') as open_file:
         opened = open_file.read()
     opened = opened.replace(b'\n', b'\r\n')
@@ -15,14 +50,38 @@ def Unixowiec(sciezka):
         open_file.write(opened)
 
 def Koncowkarz(sciezka):
+    """
+
+    Funkcja odpowiedzialna za sprawdzenie jaki koniec linii wsytępuje w pliku tekstowym i, w zależności od chęci
+    użytkownika, zmieni odpowiednio koniec linii na odwrotny
+
+    Parametry:
+    -----------
+    sciezka - str
+        ścieżka do pliku, na którym operujemy w tej funkcji (sprawdzenie i zamiana końca linii)
+    Output:
+    ----------
+        wyżej napisane funkcje zmieniające odpowiednio końce linii
+
+    """
+    if type(sciezka) != str:
+        raise TypeError("Nazwa ścieżki musi zostać podana w postaci stringa")
+    if os.path.exists(sciezka) == False:
+        raise ValueError("Plik o takiej ścieżce nie istnieje, sprawdź nazwę ścieżki")
     sprawdzacz_koncowki = open(sciezka)
     sprawdzacz_koncowki.readline()
     koncowka = repr(sprawdzacz_koncowki.newlines)
     print("Typ końca linii:", koncowka)
-    a = input("Który typ końca linii chciałbyś uzyskać? (windows/unix): ")
+    while True:
+        try:
+            a = input("Który typ końca linii chciałbyś uzyskać? (windows/unix): ")
+            assert a == "windows" or a == "unix"
+            break
+        except:
+            print("(windows/unix)")
     if a == "unix":
         return Windowsiarz(sciezka)
-    elif a == "windows":
+    else:
         return Unixowiec(sciezka)
 
 if __name__ == "__main__":
