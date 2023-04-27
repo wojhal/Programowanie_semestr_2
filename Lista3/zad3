@@ -1,22 +1,70 @@
 import PyPDF2 as pdf2
 from s2lista2zad3 import wszystkie_pliki
 from s2lista2zad4 import Dzielenie_pdf
+import os
 
 def Porownywacz(plik1, plik2):
+    """
+
+    Funkcja odpowiedzialna za porównanie dwóch pdf-ów i sprawdzenie czy są identyczne
+
+    Parametry:
+    ----------
+    plik1 - str
+        ścieżka do pierwszego pdf-a
+    plik2 - str
+        ścieżka do drugiego pdf-a
+    Output:
+    ---------
+        informacje zwrotne informujące, czy pdf jest taki sam, czy nie
+
+    """
+    if type(plik1) != str or type(plik2) != str:
+        raise TypeError("Nazwa ścieżki musi zostać podana w postaci stringa")
+    if os.path.exists(plik1) == False or os.path.exists(plik2) == False:
+        raise ValueError("Plik o takiej ścieżce nie istnieje, sprawdź nazwę ścieżki")
     with open(plik1, "rb") as pdf_one, open(plik2, "rb") as pdf_two:
         pdf1_reader = pdf2.PdfReader(pdf_one)
         pdf2_reader = pdf2.PdfReader(pdf_two)
         pdf1_strony = len(pdf1_reader.pages)
         pdf2_strony = len(pdf2_reader.pages)
         if pdf1_strony != pdf2_strony:
-            return False,",różne długości pdf-ów"
+            return False,"różne długości pdf-ów"
         else:
             for strona in range(pdf1_strony):
                 if pdf1_reader.pages[strona].extract_text() != pdf2_reader.pages[strona].extract_text():
                     return False,",różna zawartość pdf-ów"
             return True,",Pdf takie same"
 
-def Lacznik(plik_poczatkowy, sciezka, wyjsciowa):
+def Lacznik(sciezka, wyjsciowa, plik_poczatkowy=""):
+    """
+
+    Funkcja odpowiedzialna za połączenie jakiejś liczby pdf-ów w jeden
+
+    Parametry:
+    ----------
+    sciezka - str/list
+        w zależności od użytkownika może to być pdf, który ma być podzielony i z powrotem połączony lub lista pdf-ów,
+        które mają być połączone w jeden
+    wyjsciowa - str
+        ścieżka, w której ma utworzyć się nowy pdf
+    plik_poczatkowy - str
+        opcjonalny jeśli chcemy połączyć podzielony wcześniej pdf
+    Output:
+    --------
+        plik stworzony z połączonych pdf-ów
+
+    """
+    if type(plik_poczatkowy) != str:
+        raise TypeError("Nazwa ścieżki musi zostać podana w postaci stringa")
+    if os.path.exists(plik_poczatkowy) == False:
+        raise ValueError("Plik o takiej ścieżce nie istnieje, sprawdź nazwę ścieżki")
+    if type(sciezka) != str:
+        raise TypeError("Nazwa ścieżki musi zostać podana w postaci stringa")
+    if os.path.exists(sciezka) == False:
+        raise ValueError("Folder/dyrektywa o takiej ścieżce nie istnieje, sprawdź nazwę ścieżki")
+    if type(wyjsciowa) != str:
+        raise TypeError("Nazwa ścieżki musi zostać podana w postaci stringa")
     merger = pdf2.PdfMerger()
     if type(sciezka) == str:
         Dzielenie_pdf(plik_poczatkowy, sciezka, 5)
@@ -38,4 +86,4 @@ def Lacznik(plik_poczatkowy, sciezka, wyjsciowa):
         merger.close()
 
 if __name__ == "__main__":
-    print(Lacznik("/Users/wojtek/Desktop/matematicstaf/NE21.R.pdf", "/Users/wojtek/Desktop/matematicstaf/podzielony/", "/Users/wojtek/Desktop/matematicstaf/podzielony/united.pdf"))
+    print(Lacznik("/Users/wojtek/Desktop/matematicstaf/podzielony/", "/Users/wojtek/Desktop/matematicstaf/podzielony/united.pdf", "/Users/wojtek/Desktop/matematicstaf/NE21.R.pdf"))
