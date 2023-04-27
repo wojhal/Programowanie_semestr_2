@@ -1,12 +1,44 @@
 import qrcode
 import cv2
+import os
 
 def QR_tworzacz(wiadomosc):
+    """
+
+    Funkcja odpowiedzialna za zakodowanie wiadomości w postaci kodu QR
+
+    Parametry:
+    ----------
+    wiadomosc - str
+        wiadomość, która ma zostać zakodowana
+    Output:
+    ---------
+    wiadomosc.png - str
+        ścieżka do wygenerowanego QR kodu
+
+    """
     obraz = qrcode.make(wiadomosc)
     obraz.save('wiadomosc.png')
     obraz.show()
     return 'wiadomosc.png'
 def QR_reader(sciezka):
+    """
+
+    Funkcja odpowiedzialna za odczytanie wiadomości zakodowanej w QR kodzie
+
+    Parametry:
+    -----------
+    sciezka - str
+        ścieżka do QR kodu
+    Output:
+    ----------
+        odkodowana wiadomość
+
+    """
+    if type(sciezka) != str:
+        raise TypeError("Nazwa ścieżki musi zostać podana w postaci stringa")
+    if os.path.exists(sciezka) == False:
+        raise ValueError("Plik o takiej ścieżce nie istnieje, sprawdź nazwę ścieżki")
     image = cv2.imread(f"{sciezka}")
     kod = cv2.QRCodeDetector()
     data, bbox, straight_qrcode = kod.detectAndDecode(image)
