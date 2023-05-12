@@ -54,7 +54,7 @@ def Epidemia(dni):
     args = parser.parse_args()
     U0 = [args.sus, args.exp, args.inf, args.rec]
     if args.num != sum(U0):
-        raise ValueError
+        raise ValueError("Wartość N musi być równa sumie wartości S E I R")
     beta, sigma, gamma = args.beta, args.sigma, args.gamma
     czas = np.arange(0, dni, 1)
     Us = odeint(dU_dt, U0, czas, args=(beta,sigma,gamma))
