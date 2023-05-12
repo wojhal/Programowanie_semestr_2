@@ -1,0 +1,96 @@
+from scipy.integrate import odeint
+import numpy as np
+import matplotlib.pyplot as plt
+import sys
+
+def dU_dt(U, t, beta, sigma, gamma):
+    """
+    Funkcja odpowiedzialna za obliczanie liczby populacji każdej z grup w danym momencie czasowym
+
+    Parametry:
+    -----------
+    U - list
+        parametry S, E, I, R podane w liście
+    beta - float
+        współczynnik zaraźliwości
+    sigma - float
+        współczynnik inkubacji
+    gamma - float
+        współczynnik wyzdrowień
+    Output:
+    ---------
+        lista nowych wartości liczby populacji
+
+    """
+    N = sum(U)
+    return [(-beta*U[0]*U[2])/N,
+            (beta*U[0]*U[2])/N - sigma*U[1],
+            sigma*U[1] - gamma*U[2],
+            gamma*U[2]]
+
+def Epidemia(dni, dane):
+    """
+    Funkcja odpowiedzialna za przesymulowanie modelu epidemii dla podanych wartości w wierszu poleceń i przedstawienie
+    wyników w formie wykresu
+
+    Parametry:
+    -----------
+    dni - int
+        liczba dni w symulacji
+    dane - str
+        dane do symulacji podane w wierszu poleceń
+    Output:
+    ----------
+        wykres przedstawiający symulację modelu epidemii
+
+    """
+    if len(dane) != 9:
+        raise ValueError("Niewłaściwa liczba argumentów, powinieneś podać 8")
+
+    for i in range(1,6):
+        if type(dane[i]) != int:
+            raise TypeError("Wartości podawane na pozycjach 1-5 muszą być liczbami całkowitymi")
+
+    for i in range(6, len(dane)):
+        if type(dane[i]) != float:
+            raise TypeError("Wartości parametrów na pozycjach 6-8 muszą być typu float")
+
+    liczby = []
+    for i in range(1, 6):
+        liczby.append(int(dane[i]))
+    for j in range(6, len(dane)):
+        liczby.append(float(dane[j]))
+
+    for k in range(len(liczby)):
+        if liczby[k] < 0:
+            raise ValueError("Wszystkie wartości muszą mieć wartości większe od 0")
+
+    print(dane)
+    U0 = [liczby[n] for n in range(1,5)]
+
+    if sum(U0) != liczby[0]:
+        raise ValueError("Wartość N musi być równa sumie wartości S E I R")
+
+    beta, sigma, gamma = liczby[5], liczby[6], liczby[7]
+    czas = np.arange(0, dni, 1)
+    Us = odeint(dU_dt, U0, czas, args=(beta,sigma,gamma))
+    S, E, I, R = Us[:,0], Us[:,1], Us[:,2], Us[:,3]
+    plt.plot(czas, S, label='Susceptible')
+    plt.plot(czas, E, label='Exposed')
+    plt.plot(czas, I, label='Infected')
+    plt.plot(czas, R, label='Recovered')
+    plt.suptitle("Model SEIR", fontweight="bold")
+    plt.title("N=%s, S0=%s, E0=%s, I0=%s, R0=%s, beta=%s, sigma=%s, gamma=%s" % (
+        liczby[0], liczby[1], liczby[2], liczby[3], liczby[4], liczby[5], liczby[6], liczby[7]),fontsize="small")
+    plt.xlabel("Dni")
+    plt.ylabel("Populacja")
+    plt.legend()
+    plt.savefig("epidemia.png")
+    plt.show()
+
+if __name__ == "__main__":
+    Epidemia(100, sys.argv)
+#dane1 = 1000 999 1 0 0 1.34 0.19 0.34
+#dane2 =
+#dane3 =
+#dane4 =
