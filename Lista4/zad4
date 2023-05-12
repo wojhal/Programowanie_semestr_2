@@ -1,0 +1,55 @@
+import networkx as w13
+import matplotlib.pyplot as plt
+import random
+import glob
+from PIL import Image
+
+def Agent(liczba_node,moznosc,kroki):
+    """
+    Funkcja odpowiedzialna za zwrócenie randomowego błądzenia agenta po przypadkowo wygenerwoanym grafie metodą
+    gnp_random_graph
+
+    Parametry:
+    -----------
+    liczba_node - int
+        liczba punktów na wykresie
+    moznosc - float z zakresu <0,1>
+        prawdopodobieństwo stworzenia połączenia między dwoma punktami
+    kroki - int
+        liczba ruchów wykonywanych przez agenta
+    Output:
+    ----------
+        błądzenie agenta w postaci GIF-a
+
+    """
+    if type(liczba_node) != int or type(kroki) != int:
+        raise TypeError("Liczba punktów na grafie/kroków agenta musi być liczbą całkowitą")
+    if liczba_node < 0 or kroki < 0:
+        raise ValueError("Liczba punktów na grafie/kroków agenta musi być liczbą naturalną")
+    if moznosc > 1 or moznosc < 0:
+        raise ValueError("Prawdopodobieństwo stworzenia połączenia między dwoma punktami musi być w zakresie 0-1")
+    graf = w13.gnp_random_graph(liczba_node, moznosc)
+    poczatkowa = random.sample(list(graf.nodes()), 1)[0]
+    for i in range(kroki+1):
+        map_color = []
+        for node in graf:
+            if node == poczatkowa:
+                map_color.append("blue")
+            else:
+                map_color.append("red")
+        w13.draw_shell(graf, node_color=map_color, with_labels=True, node_size=500)
+        plt.savefig(f"/Users/wojtek/Desktop/gif/agent{i}.png")
+        somsiedzi = [n for n in graf.neighbors(poczatkowa)]
+        if somsiedzi == []:
+            continue
+        else:
+            nowy_agent = random.choice(somsiedzi)
+            poczatkowa = nowy_agent
+        kroki -= 1
+    frames = [Image.open(image) for image in glob.glob(f"/Users/wojtek/Desktop/gif/*.png")]
+    frame_one = frames[0]
+    frame_one.save("/Users/wojtek/Desktop/gif/agent_gif.gif", format="GIF", append_images=frames,
+                   save_all=True, duration=700, loop=0)
+
+if __name__ == "__main__":
+    Agent(10,0.4,10)
