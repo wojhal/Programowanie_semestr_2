@@ -1,0 +1,76 @@
+import argparse
+from scipy.integrate import odeint
+import numpy as np
+import matplotlib.pyplot as plt
+
+def dU_dt(U, t, beta, sigma, gamma):
+    """
+    Funkcja odpowiedzialna za obliczanie liczby populacji każdej z grup w danym momencie czasowym
+
+    Parametry:
+    -----------
+    U - list
+        parametry S, E, I, R podane w liście
+    beta - float
+        współczynnik zaraźliwości
+    sigma - float
+        współczynnik inkubacji
+    gamma - float
+        współczynnik wyzdrowień
+    Output:
+    ---------
+        lista nowych wartości liczby populacji
+
+    """
+    N = sum(U)
+    return [(-beta*U[0]*U[2])/N,
+            (beta*U[0]*U[2])/N - sigma*U[1],
+            sigma*U[1] - gamma*U[2],
+            gamma*U[2]]
+
+def Epidemia(dni):
+    """
+        Funkcja odpowiedzialna za przesymulowanie modelu epidemii dla podanych wartości w wierszu poleceń w stylu
+        uniksowym lub przyjęcie domyślnych, jeśli nie zostaną one podane
+
+        Parametry:
+        -----------
+        dni - int
+            liczba dni w symulacji
+        Output:
+        ----------
+            wykres przedstawiający symulację modelu epidemii
+
+        """
+    parser = argparse.ArgumentParser(description='Tworzenie modelu epidemii przyjmującego argumenty w stylu uniksowym')
+    parser.add_argument('-N', '--num', type=int, default=1000, help='liczba ludnosci')
+    parser.add_argument('-S', '--sus', type=int, default=999, help='liczba narażonych na zarażenie')
+    parser.add_argument('-E', '--exp', type=int, default=1, help='liczba zarażonych niezarażających')
+    parser.add_argument('-I', '--inf', type=int, default=0, help='liczba zarażonych zarażających')
+    parser.add_argument('-R', '--rec', type=int, default=0, help='liczba ozdrowiałych')
+    parser.add_argument('-beta', '--beta', type=float, default=1.34, help='wspolczynnik_zarazliwosci')
+    parser.add_argument('-sigma', '--sigma', type=float, default=0.19, help='wspolczynnik_inkubacji')
+    parser.add_argument('-gamma', '--gamma', type=float, default=0.34, help='wspolczynnik_wyzdrowien')
+    args = parser.parse_args()
+    U0 = [args.sus, args.exp, args.inf, args.rec]
+    if args.num != sum(U0):
+        raise ValueError
+    beta, sigma, gamma = args.beta, args.sigma, args.gamma
+    czas = np.arange(0, dni, 1)
+    Us = odeint(dU_dt, U0, czas, args=(beta,sigma,gamma))
+    S, E, I, R = Us[:,0], Us[:,1], Us[:,2], Us[:,3]
+    plt.plot(czas, S, label='Susceptible')
+    plt.plot(czas, E, label='Exposed')
+    plt.plot(czas, I, label='Infected')
+    plt.plot(czas, R, label='Recovered')
+    plt.suptitle("Model SEIR", fontweight="bold")
+    plt.title("N=%s, S0=%s, E0=%s, I0=%s, R0=%s, beta=%s, sigma=%s, gamma=%s" % (
+        args.num, args.sus, args.exp, args.inf, args.rec, args.beta, args.sigma, args.gamma), fontsize="small")
+    plt.xlabel("Dni")
+    plt.ylabel("Populacja")
+    plt.legend()
+    plt.savefig("epidemia.png")
+    plt.show()
+
+if __name__ == "__main__":
+    Epidemia(100)
