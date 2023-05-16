@@ -47,14 +47,6 @@ def Epidemia(dni, dane):
     if len(dane) != 9:
         raise ValueError("Niewłaściwa liczba argumentów, powinieneś podać 8")
 
-    for i in range(1,6):
-        if type(dane[i]) != int:
-            raise TypeError("Wartości podawane na pozycjach 1-5 muszą być liczbami całkowitymi")
-
-    for i in range(6, len(dane)):
-        if type(dane[i]) != float:
-            raise TypeError("Wartości parametrów na pozycjach 6-8 muszą być typu float")
-
     liczby = []
     for i in range(1, 6):
         liczby.append(int(dane[i]))
