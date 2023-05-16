@@ -37,6 +37,7 @@ def Agent(liczba_node,moznosc,kroki):
                 map_color.append("blue")
             else:
                 map_color.append("red")
+        plt.title(f"Krok {i}")
         w13.draw_shell(graf, node_color=map_color, with_labels=True, node_size=500)
         plt.savefig(f"/Users/wojtek/Desktop/gif/agent{i}.png")
         somsiedzi = [n for n in graf.neighbors(poczatkowa)]
@@ -46,7 +47,7 @@ def Agent(liczba_node,moznosc,kroki):
             nowy_agent = random.choice(somsiedzi)
             poczatkowa = nowy_agent
         kroki -= 1
-    frames = [Image.open(image) for image in glob.glob(f"/Users/wojtek/Desktop/gif/*.png")]
+    frames = [Image.open(image) for image in sorted(glob.glob(f"/Users/wojtek/Desktop/gif/*.png"), key=os.path.getmtime)]
     frame_one = frames[0]
     frame_one.save("/Users/wojtek/Desktop/gif/agent_gif.gif", format="GIF", append_images=frames,
                    save_all=True, duration=700, loop=0)
