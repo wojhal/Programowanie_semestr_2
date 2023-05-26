@@ -1,0 +1,154 @@
+import tkinter as tk
+from tkinter import ttk
+import requests
+import json
+
+okno = tk.Tk()
+width = 600
+height = 300
+
+screen_width = okno.winfo_screenwidth()
+screen_height = okno.winfo_screenheight()
+
+x = int((screen_width / 2) - (width / 2))
+y = int((screen_height / 2) - (height / 2))
+
+okno.geometry(f"{width}x{height}+{x}+{y}")
+
+okno.title('Kalkulator walutowy')
+plik = "/Users/wojtek/Desktop/waluty.json"
+
+
+def Zapisywacz_walut():
+    """
+    Funkcja odpowiedzialna za stworzenie/uaktualnienie pliku z danymi ze strony API NBP
+
+    Output:
+    ---------
+    plik - .json
+        plik z ukatualnionymi danymi ze strony API NBP
+
+    """
+    try:
+        url = "http://api.nbp.pl/api/exchangerates/tables/a/"
+        response = requests.get(url)
+        with open(plik, "wb") as file:
+            file.write(response.content)
+    except:
+        pass
+    return plik
+def Odczytywacz():
+    """
+    Funkcja odpowiedzialna za odczytanie danych z pliku z danymi ze strony API NBP
+
+    Output:
+    ---------
+    dane - list
+        dane z pliku z danymi ze strony API NBP w postaci jednoelementowej listy małych słowników
+
+    """
+    Zapisywacz_walut()
+    with open(plik, "r", encoding="utf-8") as file:
+        dane = json.load(file)
+    return dane
+def Walutowacz():
+    """
+    Funkcja odpowiedzialna za zwrócenie słownika nazw walut i przyporządkowanymi im kursami
+
+    Output:
+    ---------
+    slownik - dict
+       słownik z nazwami walut i przyporządkowanymi im ich kursami
+
+    """
+    response = Odczytywacz()
+    data = response[0]['rates']
+    nazwy = ['złoty polski']
+    kursy = [1.00]
+    slownik = {}
+    for i in range(len(data)):
+        nazwy.append(data[i]['currency'])
+        kursy.append(data[i]['mid'])
+    for i in range(len(nazwy)):
+        slownik[nazwy[i]] = kursy[i]
+    return slownik
+
+def Datownik():
+    """
+    Funkcja odpowiedzialna za zwrócenie daty, w której obowiązują kursy walut w aktualnym okienku
+
+    Output:
+    ---------
+    data - str
+        data,w której obowiązują kursy walut w aktualnym okienku
+
+    """
+    response = Odczytywacz()
+    data = response[0]['effectiveDate']
+    return data
+
+#tytułowa sekcja
+top_frame = tk.Frame(okno, width=60, height=height)
+top_frame.grid(row=0, column=0)
+
+name_label = tk.Label(top_frame, text='Witamy w kantorze', bg="green", fg="white", pady=12, padx=width/4, justify="center"
+                      , font='Rupee 30')
+name_label.grid(row=0, column=0)
+
+#informacyjna sekcja
+middle_frame = tk.Frame(okno, width=600, height=30)
+middle_frame.grid(row=1, column=0)
+
+date_button = tk.Label(middle_frame, text=f'Wymiana:stan na {Datownik()}', font='Myriad 20')
+date_button.place(x=166, y=0)
+
+#obliczeniowa sekcja
+bottom_frame = tk.Frame(okno, width=600, height=216)
+bottom_frame.grid(row=2, column=0)
+
+from_currency_label = tk.Label(bottom_frame, text='Waluta, którą chcesz sprzedać:', font='Andalus 15', justify="right")
+from_currency_label.place(x=300, y=10)
+
+from_currency_combo = ttk.Combobox(bottom_frame, values=list(Walutowacz().keys()), state='readonly', width=28, font='Andalus 14', justify='center')
+from_currency_combo.place(x=300, y=40)
+
+to_currency_label = tk.Label(bottom_frame, text='Waluta, którą chcesz kupić:', font='Andalus 15', justify="right")
+to_currency_label.place(x=300, y=70)
+
+to_currency_combo = ttk.Combobox(bottom_frame, values=list(Walutowacz().keys()), state='readonly', width=28, font='Andalus 14', justify='center')
+to_currency_combo.place(x=300, y=100)
+
+amount_label = tk.Label(bottom_frame, text='Wpłacasz:', font='Andalus 15')
+amount_label.place(x=5, y=10)
+
+amount_entry = tk.Entry(bottom_frame, font='Andalus 14', justify=tk.CENTER, width= 28)
+amount_entry.place(x=5, y=40)
+
+def Przelicznik():
+    """
+    Funkcja odpowiedzialna za przeliczenie, ile zdołamy kupić jednej waluty, wpłacając w zamian drugą
+
+    Output:
+    ---------
+        zmodyfikowanie wartości ilości waluty kupowanej w funkcji result_window
+
+    """
+    pierwsza_waluta=from_currency_combo.get()
+    druga_waluta=to_currency_combo.get()
+    ilosc=amount_entry.get()
+    wynik=float(ilosc)*(Walutowacz()[pierwsza_waluta]/Walutowacz()[druga_waluta])
+    result_window.config(text=str(wynik))
+
+result_label = tk.Label(bottom_frame, text="Kupiono:", font='Andalus 15')
+result_label.place(x=5, y=70)
+
+result_window = tk.Label(bottom_frame, text='', relief="ridge", width = 28)
+result_window.place(x=5, y=100)
+
+convert_button = tk.Button(bottom_frame, width=6, height=2, text="Oblicz", fg="black", font='Andalus 14 bold', command=Przelicznik)
+convert_button.place(x=93, y=140)
+
+exit_button = tk.Button(bottom_frame, width=6, height=2, text="Zakończ", fg="black", font='Andalus 14 bold', command=okno.destroy)
+exit_button.place(x=393, y=140)
+
+okno.mainloop()
