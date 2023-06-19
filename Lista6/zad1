@@ -26,14 +26,18 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 YELLOW = (255, 255, 0)
 GREEN = (50, 205, 50)
-GREY = (128, 128, 128)
+GREY = (105, 105, 105)
 RED = (255, 0, 0)
+ORANGE = (255,165,0)
+SZAFIROWY = (15,82,186)
 betis = "XXXXXXYXXXXXX\nYYYYYYGYYYYYY\nYGWGWGWGWGWGY\nYGWGWGGWWGWGY\nXYWGWGWGWGWYX\nXXYGWWGWWGYXX\nXXXYWGWGWYXXX\nXXXXYGWGYXXXX\nXXXXXYWYXXXXX\nXXXXXXYXXXXXX"
-swansea = "XXXXXXWBBBXX\nXXXXXWBWWWBX\nXXXXXWBWWWBB\nXXXXXXWBWWWX\nXXXWWWWWBWXX\nXXWWBBBWBBWX\nXWWBBWWWWBBX\nXWBBWBBBWWBB\nBBBWBBWWWWWB\nWWWBBWBBBWWB\nWBBBWBBWWWBW\nXWWWBBWWBBWX\nXWBBBWXXWWXX"
-hanover = "XXXGGGGGGXXXX\nXWBBBGGGGBBBW\nWBBBBBBGGBBBWX\nWBBWBBGGBBGGX\nWBBBBBGBBGGGX\nXGGBBBGBBBGGX\nXGGGBBGBBBBBW\nXGGBBGGBBWBBW\nXWBBBGGBBBBBW\nWBBBGGGGBBBWX\nXXXXGGGGGGXXX"
-juve = "XXXWWWWWWXXX\nWWWBBBBWBWWW\nWWWWWWBWBWWW\nWWWWWWBWBWWW\nWWWWWWBWBWWW\nWWWWWWBWBWWW\nWWWWWBBWBWWW\nWWWWBBWWBWWW\nWWWWWWWBBWWW\nWWWWWWBBWWWW\nWWWWWBBWWWWW"
+swansea = "XXXXXXWBBBXX\nXXXXXWBWWWBX\nXXXXXWBWWWBB\nXXXXXWWBWWWW\nXXXWWWWWBWXX\nXXWWBBBWBBWX\nXWWBBWWWWBBW\nXWBBWBBBWWBB\nBBBWBBWWWWWB\nWWWBBWBBBWWB\nWBBBWBBWWWBW\nXWWWBBWWBBWX\nXWBBBWWWWWWX"
+hanover = "XXXGGGGGGXXXX\nXWBBBGGGGBBBW\nWBBBBBGGGBBBWX\nWBBWBBGGBBGGX\nWBBBBBGBBGGGX\nXGGBBBGBBBGGX\nXGGGBBGBBBBBW\nXGGBBGGBBWBBW\nXWBBBGGBBBBBW\nWBBBGGGGBBBWX\nXXXXGGGGGGXXX"
+juve = "XXXWWWWWWXXX\nWWWBBBBWBWWW\nWWWWWWBWBWWW\nWWWWWWBWBWWW\nWWWWWWBWBWWW\nWWWWWWBWBWWW\nWWWWWBBWBWWW\nXWWWBBWWBWWX\nXXWWWWWBBWXX\nXXXWWWBBWXXX\nXXXXWBBWXXXX\nXXXXXWWXXXXX"
 furth = "XXXXGGGGGXXXX\nXXGGWWWWWGGXX\nXGWWWGWGWWWGX\nXGWWGGGGGWWGX\nGWWGWGGGWGWWG\nGWGGGWGWGGGWG\nGWWGGGGGGGWWG\nGWGGGWGWGGGWG\nGWWGWWGWWGWWG\nXGWWWGGWWWWGX\nXGWWGGWWWWWGX\nXXGGWWWWWGGXX\nXXXXGGGGGXXXX"
-mapa = [betis, swansea, hanover, juve, furth]
+wolves = "XXXXBBBBBXXXX\nXXXBOOOOOBXXX\nXXBOBOOOBOBXX\nXBOOBBBBBOOBX\nXBOBBBBBBBOBX\nBOOBBWBWBBOOB\nBOOOBBBBBOOOB\nXBOOOBBBOOOBX\nXBOOOBBBOOOBX\nXXBOOOBOOOBXX\nXXXBOOOOOBXXX\nXXXXBBBBBXXXX"
+hamburg = "XXXXXXXXXXXXX\nSSSSSSSSSSSSS\nSSSSSSWSSSSSS\nSSSSSWWWSSSSS\nSSSSWBBBWSSSS\nSSSWWBWBWWSSS\nSSSSWBBBWSSSS\nSSSSSWWWSSSSS\nSSSSSSWSSSSSS\nSSSSSSSSSSSSS"
+mapa = [betis, swansea, hanover, juve, furth, wolves, hamburg]
 lobby = "/Users/wojtek/Desktop/sounds/mixkit-stadium-joy-shouting-crowd-3022.wav"
 hicik = "/Users/wojtek/Desktop/sounds/mixkit-arrow-shot-through-air-2771.wav"
 hitens = "/Users/wojtek/Desktop/sounds/mixkit-golf-ball-hit-2105.wav"
@@ -43,6 +47,30 @@ dzwieki = True
 
 # platforma
 class Platforma:
+    """
+    Klasa służąca do tworzenia obiektu Platformy (deski, którą kierujemy)
+
+    Atrybuty:
+    ----------
+    x - float
+        pozycja lewego górnego wierzchołka na mapie w poziomie
+    y - float
+        pozycja lewego górnego wierzchołka na mapie w pionie
+    width - int
+        szerokość platformy
+    height - int
+        wysokość platformy
+    kolor - tuple
+        kolor rgb platformy
+
+    Metody:
+    ---------
+    poruszanie(kierunek)
+        metoda pozwalająca na ruch platformą w zależności od parametru kierunku
+    draw(SCREEN)
+        metoda wyświetlająca platformę na ekranie (SCREEN)
+
+    """
     VEL = 0
 
     def __init__(self, x, y, width, height, kolor):
@@ -61,6 +89,30 @@ class Platforma:
 
 # piłka
 class Ball:
+    """
+    Klasa służąca do tworzenia obiektu Piłki
+
+    Atrybuty:
+    ----------
+    x - float
+        pozycja środka piłki na mapie w poziomie
+    y - float
+        pozycja środka piłki na mapie w pionie
+    r - float
+        promień piłki
+    x_vel - float
+        prędkość z jaką porusza się piłka w poziomie
+    y_vel - float
+        prędkość z jaką porusza się piłka w pionie
+
+    Metody:
+    ---------
+    poruszanie()
+        metoda pozwalająca na ruch piłki po mapie oraz określająca jej ograniczenia
+    draw(SCREEN)
+        metoda wyświetlająca piłkęna ekranie razem z obrazkiem towarzyszącym
+
+    """
     VEL = -4
     VEL1 = 4
 
@@ -96,7 +148,30 @@ class Ball:
 
 # klocki
 class Brick:
+    """
+    Klasa służąca do tworzenia obiektów Klocków (bricków)
 
+    Atrubuty:
+    ----------
+    x - float
+        pozycja lewego górnego wierzchołka bricka na mapie w poziomie
+    y - float
+        pozycja lewego górnego wierzchołka bricka na mapie w pionie
+    width - int
+        szerokość bricka
+    height - int
+        wysokość bricka
+    kolor - tuple
+        kolor rgb bricka
+    hit - bool
+        definiuje czy blok został trafiony czy nie
+
+    Metody:
+    ---------
+    draw(SCREEN)
+        metoda do wyświetlania bricka na mapie
+
+    """
     def __init__(self,x,y,width,height,kolor):
         self.x = x
         self.y = y
@@ -111,12 +186,27 @@ class Brick:
 
 
 def tlo():
+    """
+    Funkcja służąca do ustawienia odpowiedniego tła dla każdego widoku z menu/gry
+
+    """
     tlo = pygame.transform.scale(pygame.image.load("/Users/wojtek/Desktop/peach.png"), (WIDTH, HEIGHT))
     pygame.display.flip()
     SCREEN.blit(tlo, (0, 0))
 
 # zderzenie brick-pilka
 def brick_pilka(brick, pilka):
+    """
+    Funkcja określająca moment zderzenia piłki z brickiem
+    Parametry:
+    ----------
+    pilka - obiekt klasy Ball
+    brick - obiekt klasy Brick
+    Output:
+    --------
+    zmiana statusu obiektu brick hit na True (trafiony)
+
+    """
     if brick.y <= pilka.y <= brick.y + brick.height and pilka.r >= brick.x - pilka.x > 0 or brick.y <= pilka.y <= brick.y + brick.height and pilka.r >= pilka.x - (brick.x+brick.width) > 0:
         pilka.x_vel = -1*pilka.x_vel
         brick.hit = True
@@ -124,9 +214,21 @@ def brick_pilka(brick, pilka):
         pilka.y_vel = -1*pilka.y_vel
         brick.hit = True
 
-
 # generowanie mapy
 def generowanie_mapy(mapa):
+    """
+    Funkcja służąca do wygenerowania mapy z jednego ze stringów podanych na początku (odpowiednie litery oznaczają odpowiedni kolor bricka)
+    Parametry:
+    ----------
+    mapa - list
+        lista map dostępnych do wygenerowania
+
+    Output:
+    ---------
+    bricks_ele - list
+        lista bricków, które są do zbicia na mapie
+
+    """
     numer = random.randint(1, len(mapa))
     mapka = mapa[numer-1]
     bricks = [[*line.strip(',')] for line in mapka.split('\n') if line]
@@ -152,6 +254,14 @@ def generowanie_mapy(mapa):
                 bricks[rzedy][brick] = Brick(brick * brick_width + gap * brick, rzedy * brick_height + gap * rzedy,
                                              brick_width, brick_height, WHITE)
                 bricks_ele.append(bricks[rzedy][brick])
+            elif bricks[rzedy][brick] == "O":
+                bricks[rzedy][brick] = Brick(brick * brick_width + gap * brick, rzedy * brick_height + gap * rzedy,
+                                             brick_width, brick_height, ORANGE)
+                bricks_ele.append(bricks[rzedy][brick])
+            elif bricks[rzedy][brick] == "S":
+                bricks[rzedy][brick] = Brick(brick * brick_width + gap * brick, rzedy * brick_height + gap * rzedy,
+                                             brick_width, brick_height, SZAFIROWY)
+                bricks_ele.append(bricks[rzedy][brick])
 
 
     return bricks_ele
@@ -160,6 +270,18 @@ def generowanie_mapy(mapa):
 
 # zderzenie platforma-pilka
 def platforma_pilka(platforma, pilka):
+    """
+    Funkcja służąca do określenia momentu zderzenia piłki z platformą
+    Parametry:
+    ----------
+    platforma - obiekt klasy Platforma
+    pilka - obiekt klasy Ball
+
+    Output:
+    ---------
+    odpowiednia zmiana kierunku piłki, w zależności od jej pozycji względem platformy w momencie uderzenia
+
+    """
     if pilka.r + pilka.y == HEIGHT - 2 * platforma.height:
         punkt = round((pilka.x - platforma.x) / (platforma.width / 2), 1)
         if 0 <= punkt < 0.6 or 1.4 < punkt <= 2:
@@ -186,6 +308,24 @@ def platforma_pilka(platforma, pilka):
 
 # okno
 def wyglad_okna(platforma, pilka, bricks_ele, LIVES, WYNIK):
+    """
+    Funkcja służąca do przedstawienia wszystkich elementów na ekranie z rozgrywką oraz ich aktualizacja regularna
+    Parametry:
+    ----------
+    platforma - obiekt klasy Platforma
+    pilka - obiekt klasy Ball
+    bricks_ele - list
+        mapa bloków do zbicia
+    LIVES - int
+        liczba żyć przy jednym podejściu gracza
+    WYNIK - int
+        wynik gracza w pojedynczej rozgrywce
+
+    Output:
+    ---------
+    przedstawienie wszystkich elementów na ekranie
+
+    """
     tlo = pygame.transform.scale(pygame.image.load("/Users/wojtek/Desktop/peach.png"), (WIDTH, HEIGHT))
     pygame.display.flip()
     SCREEN.blit(tlo, (0, 0))
@@ -205,6 +345,26 @@ def wyglad_okna(platforma, pilka, bricks_ele, LIVES, WYNIK):
 
 # menu
 class Przycisk:
+    """
+    Klasa służąca do reprezentacji przycisków w menu
+
+    Atrybuty:
+    ----------
+    napis - string
+        napis na przycisku
+    pos - tuple
+        pozycja przycisku na mapie
+    button - obiekt Rect
+        obiekt Rect, który posiada własne atrybuty np. kliknięcie
+
+    Metody:
+    ----------
+    draw()
+        metoda do wyśtwietlania przycisku z napisem na ekranie
+    check_clicked()
+        metoda sprawdzająca czy użytkownik wcisnął myszką pole przycisku
+
+    """
     def __init__(self, napis, pos):
         self.napis = napis
         self.pos = pos
@@ -224,6 +384,14 @@ class Przycisk:
 
 # menu
 def draw_menu():
+    """
+    Funkcja odpowiedzialna za stworzenie menu gry oraz "centrala do rozsyłania" gracza do odpowiednich okien np. samej rozgrywki, zasad
+
+    Output:
+    --------
+    nieskończona pętla menu, chyba że zostaną przez gracza wciśnięte odpowiednie rzeczy (np. przycisk KONIEC GRY)
+
+    """
     pygame.mixer.music.load(lobby)
     pygame.mixer.music.play(loops=-1)
     while True:
@@ -232,7 +400,6 @@ def draw_menu():
         tytul = pygame.draw.rect(SCREEN, BLACK, (150, 75, 403, 150))
         txt = font_tytul.render('FOOT-BRICK BREAKER!', True, 'WHITE')
         SCREEN.blit(txt, (tytul1.x + 30, (tytul1.y + tytul1.height)/2))
-        # menu exit button
         GRA = Przycisk('START', (232, 280))
         GRA.draw()
         ZASADY = Przycisk('ZASADY', (232, 345))
@@ -243,6 +410,7 @@ def draw_menu():
         AUTOR.draw()
         USTAWIENIA = Przycisk("USTAWIENIA", (232, 540))
         USTAWIENIA.draw()
+        # menu exit button
         WYJSCIE = Przycisk('KONIEC GRY', (232, 605))
         WYJSCIE.draw()
 
@@ -272,6 +440,14 @@ def draw_menu():
 
 # zasady
 def zasady():
+    """
+    Funkcja odpowiedzialna za okno zasad, ich przedstawienie w formie graficznej
+
+    Output:
+    ---------
+    Nieskończona pętla okna zasad, chyba że zostaną przez gracza wciśnięte odpowiednie rzeczy (np.klawisz backspace)
+
+    """
     running = True
     while running:
         tlo()
@@ -294,7 +470,16 @@ def zasady():
         SCREEN.blit(zyczenia, (210, 510))
     return
 
+# o autorze
 def autor():
+    """
+    Funkcja odpowiedzialna za dostarczenie informacji o autorze gry graczowi w formie graficznej
+
+    Output:
+    ---------
+    Nieskończona pętla okna o autorze, chyba że zostaną przez gracza wciśnięte odpowiednie rzeczy (np.klawisz backspace)
+
+    """
     running = True
     while running:
         tlo()
@@ -309,11 +494,31 @@ def autor():
         SCREEN.blit(autor_gry, (65, HEIGHT//2))
 
 def zachowaj(highscores):
+    """
+    Funkcja służąca do modyfikacji pliku z najwyższymi wynikami z poziomu gry
+    Parametry:
+    ----------
+    highscores - plik .json
+        plik z zapisanymi najwyższymi wynikami w grze
+
+    Output:
+    ---------
+    zapisanie danych w pliku z najwyższymi wynikami
+
+    """
     with open('/Users/wojtek/Desktop/highscore.json', 'w') as file:
         json.dump(highscores, file)
 
 
 def laduj():
+    """
+    Funkcja odpowiedzialna za załadowanie/utworzenie (jeśli takowy nie istnieje) pliku z najwyższymi wynikami do wyświetlenia/modyfikacji ich
+
+    Output:
+    ---------
+    posortowana od najwyższego lista z najwyższymi wynikami
+
+    """
     try:
         with open('/Users/wojtek/Desktop/highscore.json', 'r') as file:
             highscores = json.load(file)
@@ -322,6 +527,16 @@ def laduj():
     return sorted(highscores, key=itemgetter(1), reverse=True)
 
 def scores():
+    """
+    Funkcja odpowiedzialna za dostarczenie informacji graczowi o  makysmalnie 5 najwyższych wynikach uzyskanych
+    zapisanych w pliku .json
+
+    Output:
+    ---------
+    Nieskończona pętla okna z najwyższymi wynikami, chyba że zostaną przez gracza wciśnięte odpowiednie rzeczy
+    (np.klawisz backspace)
+
+    """
     running = True
     while running:
         tlo()
@@ -343,6 +558,15 @@ def scores():
             SCREEN.blit(tekst2, (160, 150+y*100))
 
 def ustawienia():
+    """
+    Funkcja odpowiedzialna za okno ustawienia, w którym gracz może wyłączyć lub ponownie włączyć dźwięk na poziomie całej gry
+
+    Output:
+    ---------
+    Zmodyfikowany lub nie dźwięk oraz nieskończona pętla okna ze zmianą dźwięku, chyba że zostaną przez gracza wciśnięte
+     odpowiednie rzeczy (np.klawisz backspace)
+
+    """
     global dzwieki
     running = True
     while running:
@@ -373,6 +597,22 @@ def ustawienia():
 
 # gra
 def draw_game():
+    """
+    Funkcja odpowiedzialna za wyświetlanie oraz utrzymywanie rozgrywki w pętli dopóki gracz nie straci wszystkich żyć.
+    Domyślnie włączone są dźwięki przy zderzeniu piłki ze ścianami, brickami i platformą, wyłączone, jeśli taka
+    modyfikacja zostanie dokonana wcześniej w ustawieniach. Jeśli gracz zbije wszystkie bloki zostaje my wylosowana mapa
+    z listy wszystkich map (może być ta sama). Po zdobyciu 250 puntków oraz ich wielokrotności (500,750,itd.) zwiększana
+    jest progresywnie szybkość piłki, co wpływa na trudność rozgrywki. Jeśli wszystkie życia zostaną utracone, pojawia się
+    ekran wyjścia z komunikatem informującym gracza o przeganej, który może dalej przejść w ekran wpisywania nazwy, gdzie
+    podaje się nazwę do umieszczenia w najwyższych wynikach, jeśli wynik rozgrywki jest większy niż 5. najwyższy wynik
+
+    Output:
+    ---------
+    W zależności od zachowania użytkownika okno gry można opuścić automatycznie (wciskając czerwonego "x" u góry okna gry)
+    lub grać dalej i próbować przebić się do 5. najwyższych wyników. Wszystkie okna działające w tej funkcji to nieskoń-
+    czone pętle, które, podobnie jak okno gry opisane powyżej można opuścić i wrócić do menu
+
+    """
     global highscores
     if dzwieki == True:
         pygame.mixer.music.pause()
@@ -415,7 +655,7 @@ def draw_game():
                     pygame.mixer.Sound.play(hicik_sound)
                 bricks_ele.remove(brick)
                 WYNIK += 5
-                if WYNIK % 250 == 0 and WYNIK != 0:
+                if WYNIK % 250 == 0 and WYNIK != 0 and WYNIK <= 1000:
                     pilka.VEL1 += 0.5
         if not bricks_ele:
             platforma.x = WIDTH // 2 - PL_WIDTH // 2
@@ -497,6 +737,14 @@ def draw_game():
         pygame.display.flip()
 
 def main():
+    """
+    Funkcja służąca do wywołania całej gry, ze wszystkimi elementami
+
+    Output:
+    ---------
+    Gra FootBrick Breaker
+
+    """
     draw_menu()
 
 main()
