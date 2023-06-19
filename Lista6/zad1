@@ -308,6 +308,19 @@ def autor():
         autor_gry = font_duzy.render("ODDAŁ GRĘ 4 DNI PO CZASIE", True, BLACK)
         SCREEN.blit(autor_gry, (65, HEIGHT//2))
 
+def zachowaj(highscores):
+    with open('/Users/wojtek/Desktop/highscore.json', 'w') as file:
+        json.dump(highscores, file)  
+
+
+def laduj():
+    try:
+        with open('/Users/wojtek/Desktop/highscore.json', 'r') as file:
+            highscores = json.load(file) 
+    except FileNotFoundError:
+        return [] 
+    return sorted(highscores, key=itemgetter(1), reverse=True)
+
 def scores():
     running = True
     while running:
@@ -328,17 +341,6 @@ def scores():
             SCREEN.blit(tekst1, (157, 152+y*100))
             tekst2 = font_potezny.render(f'{high_name}:{high_score}', True, WHITE)
             SCREEN.blit(tekst2, (160, 150+y*100))
-
-def zachowaj(highscores):
-    with open('/Users/wojtek/Desktop/highscore.json', 'w') as file:
-        json.dump(highscores, file)
-
-
-def laduj():
-    with open('/Users/wojtek/Desktop/highscore.json', 'r') as file:
-        highscores = json.load(file)
-    return sorted(highscores, key=itemgetter(1), reverse=True)
-
 
 def ustawienia():
     global dzwieki
@@ -435,7 +437,7 @@ def draw_game():
             SCREEN.blit(press_space, (press_space.get_width()//4-3, 497))
             press_space2 = font_tytul.render('NACIŚNIJ SPACJE ABY ZAGRAĆ', True, RED)
             SCREEN.blit(press_space2, (press_space.get_width() // 4, 500))
-        if LIVES == 0:
+        if LIVES == 2:
             bez_zyc = True
             running = False
             if dzwieki == True:
