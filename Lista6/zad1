@@ -310,15 +310,15 @@ def autor():
 
 def zachowaj(highscores):
     with open('/Users/wojtek/Desktop/highscore.json', 'w') as file:
-        json.dump(highscores, file)  
+        json.dump(highscores, file)
 
 
 def laduj():
     try:
         with open('/Users/wojtek/Desktop/highscore.json', 'r') as file:
-            highscores = json.load(file) 
+            highscores = json.load(file)
     except FileNotFoundError:
-        return [] 
+        return []
     return sorted(highscores, key=itemgetter(1), reverse=True)
 
 def scores():
@@ -415,7 +415,7 @@ def draw_game():
                     pygame.mixer.Sound.play(hicik_sound)
                 bricks_ele.remove(brick)
                 WYNIK += 5
-                if WYNIK % 250 == 0 and WYNIK != 0 and WYNIK <= 1000:
+                if WYNIK % 250 == 0 and WYNIK != 0:
                     pilka.VEL1 += 0.5
         if not bricks_ele:
             platforma.x = WIDTH // 2 - PL_WIDTH // 2
@@ -437,7 +437,7 @@ def draw_game():
             SCREEN.blit(press_space, (press_space.get_width()//4-3, 497))
             press_space2 = font_tytul.render('NACIŚNIJ SPACJE ABY ZAGRAĆ', True, RED)
             SCREEN.blit(press_space2, (press_space.get_width() // 4, 500))
-        if LIVES == 2:
+        if LIVES == 0:
             bez_zyc = True
             running = False
             if dzwieki == True:
@@ -455,7 +455,7 @@ def draw_game():
                     pygame.mixer.music.unpause()
             if event.type == pygame.KEYDOWN:
                 highscores = laduj()
-                if WYNIK > highscores[-1][1]:
+                if highscores == [] or WYNIK > highscores[-1][1]:
                     bez_zyc = False
                     wynikanie = True
                     if dzwieki == True:
